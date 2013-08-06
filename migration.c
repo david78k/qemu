@@ -152,6 +152,25 @@ MigrationInfo *qmp_query_migrate(Error **errp)
     case MIG_STATE_COMPLETED:
         info->has_status = true;
         info->status = g_strdup("completed");
+
+        info->has_total_time = true;
+        info->total_time = s->total_time;
+        info->has_downtime = true;
+        info->downtime = s->downtime;
+        info->has_setup_time = true;
+        info->setup_time = s->setup_time;
+
+        info->has_ram = true;
+        info->ram = g_malloc0(sizeof(*info->ram));
+        info->ram->transferred = ram_bytes_transferred();
+        info->ram->remaining = 0;
+        info->ram->total = ram_bytes_total();
+        info->ram->duplicate = dup_mig_pages_transferred();
+        info->ram->skipped = skipped_mig_pages_transferred();
+        info->ram->normal = norm_mig_pages_transferred();
+        info->ram->normal_bytes = norm_mig_bytes_transferred();
+        info->ram->mbps = s->mbps;
+
         break;
     case MIG_STATE_ERROR:
         info->has_status = true;
