@@ -264,7 +264,14 @@
 ##
 { 'type': 'MigrationInfo',
   'data': {'*status': 'str', '*ram': 'MigrationStats',
-           '*disk': 'MigrationStats'} }
+           '*disk': 'MigrationStats',
+           '*total-time': 'int',
+           '*expected-downtime': 'int',
+           '*downtime': 'int'} }
+
+#           '*xbzrle-cache': 'XBZRLECacheStats',
+
+#           '*disk': 'MigrationStats'} }
 
 ##
 # @query-migrate
