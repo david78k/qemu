@@ -133,6 +133,19 @@ void hmp_info_migrate(Monitor *mon)
 
     if (info->has_status) {
         monitor_printf(mon, "Migration status: %s\n", info->status);
+	//monitor_printf(mon, "total time: %" PRIu64 " milliseconds\n", 7892L);
+	monitor_printf(mon, "total time: %" PRIu64 " milliseconds\n",
+                       info->total_time);
+        if (info->has_expected_downtime) {
+            monitor_printf(mon, "expected downtime: %" PRIu64 " milliseconds\n",
+                           info->expected_downtime);
+        }
+        if (info->has_downtime) {
+            //monitor_printf(mon, "downtime: %" PRIu64 " milliseconds\n", 99L);
+            monitor_printf(mon, "downtime: %" PRIu64 " milliseconds\n",
+                           info->downtime);
+        }
+
     }
 
     if (info->has_ram) {

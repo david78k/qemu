@@ -153,10 +153,12 @@ MigrationInfo *qmp_query_migrate(Error **errp)
         info->has_status = true;
         info->status = g_strdup("completed");
 
+	/* begin_tae */
         info->has_total_time = true;
         info->total_time = s->total_time;
         info->has_downtime = true;
         info->downtime = s->downtime;
+	/*
         info->has_setup_time = true;
         info->setup_time = s->setup_time;
 
@@ -170,7 +172,8 @@ MigrationInfo *qmp_query_migrate(Error **errp)
         info->ram->normal = norm_mig_pages_transferred();
         info->ram->normal_bytes = norm_mig_bytes_transferred();
         info->ram->mbps = s->mbps;
-
+	*/
+	/* end_tae */
         break;
     case MIG_STATE_ERROR:
         info->has_status = true;
@@ -265,6 +268,14 @@ static ssize_t migrate_fd_put_buffer(void *opaque, const void *data,
 static void migrate_fd_put_ready(void *opaque)
 {
     MigrationState *s = opaque;
+    /* begin_tae */
+    //int64_t initial_time = qemu_get_clock_ms(rt_clock);
+    //int64_t setup_start = qemu_get_clock_ms(host_clock);
+    //int64_t initial_bytes = 0;
+    //int64_t max_size = 0;
+    //int64_t start_time = initial_time;
+    //bool old_vm_running = false;
+    /* end_tae */
     int ret;
 
     if (s->state != MIG_STATE_ACTIVE) {
@@ -313,6 +324,80 @@ static void migrate_fd_put_ready(void *opaque)
         } else {
             migrate_fd_completed(s);
         }
+
+        if (s->state != MIG_STATE_COMPLETED) {
+            if (old_vm_running) {
+                vm_start();
+            }
+        } else {
+ 	   /* begin_tae */
+           DPRINTF("done migration\n");
+	   int64_t end_time = qemu_get_clock_ms(rt_clock);
+           //s->total_time = end_time - s->total_time;
+           //s->total_time = 1000;
+	   end_time = 0;
+           //if (!migration_postcopy_outgoing()) {
+        	//s->downtime = end_time - start_time;
+        //	s->downtime = 999;
+          // }
+	   /* end_tae */
+	}
+    }
+}
+/*
+static void migrate_fd_put_ready_origin(void *opaque)
+{
+    MigrationState *s = opaque;
+    int ret;
+
+    if (s->state != MIG_STATE_ACTIVE) {
+        DPRINTF("put_ready returning because of non-active state\n");
+        return;
+    }
+
+    if (s->substate == MIG_SUBSTATE_POSTCOPY) {
+*/
+        /* PRINTF("postcopy background\n"); */
+/*
+        ret = postcopy_outgoing_ram_save_background(s->file, s->postcopy);
+        if (ret > 0) {
+            migrate_fd_completed(s);
+        } else if (ret < 0) {
+            migrate_fd_error(s);
+        }
+        return;
+    }
+
+    DPRINTF("iterate\n");
+    ret = qemu_savevm_state_iterate(s->file);
+    if (ret < 0) {
+        migrate_fd_error(s);
+    } else if (ret == 1) {
+        int old_vm_running = runstate_is_running();
+
+        DPRINTF("done iterating\n");
+        qemu_system_wakeup_request(QEMU_WAKEUP_REASON_OTHER);
+        vm_stop_force_state(RUN_STATE_FINISH_MIGRATE);
+
+        if (s->params.postcopy) {
+            if (qemu_savevm_state_complete(s->file, s->params.postcopy) < 0) {
+                migrate_fd_error(s);
+                if (old_vm_running) {
+                    vm_start();
+                }
+                return;
+            }
+            s->substate = MIG_SUBSTATE_POSTCOPY;
+            s->postcopy = postcopy_outgoing_begin(s);
+            qemu_buffered_file_ready(s->file);
+            return;
+        }
+
+        if (qemu_savevm_state_complete(s->file, s->params.postcopy) < 0) {
+            migrate_fd_error(s);
+        } else {
+            migrate_fd_completed(s);
+        }
         if (s->state != MIG_STATE_COMPLETED) {
             if (old_vm_running) {
                 vm_start();
@@ -320,6 +405,7 @@ static void migrate_fd_put_ready(void *opaque)
         }
     }
 }
+*/
 
 static void migrate_fd_cancel(MigrationState *s)
 {
@@ -424,7 +510,9 @@ static MigrationState *migrate_init(const MigrationParams *params)
     s->params = *params;
     s->bandwidth_limit = bandwidth_limit;
     s->state = MIG_STATE_SETUP;
-
+    /* begin_tae */
+    s->total_time = qemu_get_clock_ms(rt_clock);
+    /* end_tae */
     return s;
 }
 
