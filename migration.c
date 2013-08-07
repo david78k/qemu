@@ -269,11 +269,12 @@ static void migrate_fd_put_ready(void *opaque)
 {
     MigrationState *s = opaque;
     /* begin_tae */
-    //int64_t initial_time = qemu_get_clock_ms(rt_clock);
+    int64_t initial_time = qemu_get_clock_ms(rt_clock);
     //int64_t setup_start = qemu_get_clock_ms(host_clock);
     //int64_t initial_bytes = 0;
     //int64_t max_size = 0;
     //int64_t start_time = initial_time;
+    s->start_time = initial_time;
     //bool old_vm_running = false;
     /* end_tae */
     int ret;

@@ -561,14 +561,9 @@ static void postcopy_outgoing_recv_handler(void *opaque)
         int64_t end_time = qemu_get_clock_ms(rt_clock);
 	//s->ms->total_time = 9999L;
         s->ms->total_time = end_time - s->ms->total_time;
-           //           //end_time = 0;
-           //                      //if (!migration_postcopy_outgoing()) {
-           //                                      s->downtime = end_time - start_time;
-           //                                              //      s->downtime = 999;
-           //                                                        // }
-           //                                                                    /* end_tae */
-           //
-	
+           //if (!migration_postcopy_outgoing()) {
+           s->ms->downtime = end_time - s->ms->start_time;
+           //}
 	/* end_tae */
     }
 }
