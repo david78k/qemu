@@ -305,6 +305,9 @@ static void migrate_fd_put_ready(void *opaque)
         DPRINTF("done iterating\n");
         qemu_system_wakeup_request(QEMU_WAKEUP_REASON_OTHER);
         vm_stop_force_state(RUN_STATE_FINISH_MIGRATE);
+	/* begin_tae */
+	s->downtime = qemu_get_clock_ms(rt_clock) - initial_time;
+	/* end_tae */
 
         if (s->params.postcopy) {
             if (qemu_savevm_state_complete(s->file, s->params.postcopy) < 0) {
