@@ -1,7 +1,0 @@
-# QEMU configure log Thu Aug  1 13:58:01 EDT 2013
-# Configured with: './configure' '--target-list=x86_64-softmmu' '--enable-rdma'
-#
-cc -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -Wstrict-prototypes -Wredundant-decls -Wall -Wundef -Wwrite-strings -Wmissing-prototypes -fno-strict-aliasing -c -o /tmp/qemu-conf-24210-24432-30033.o /tmp/qemu-conf-30759-24432-28821.c
-cc -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -Wstrict-prototypes -Wredundant-decls -Wall -Wundef -Wwrite-strings -Wmissing-prototypes -fno-strict-aliasing -c -o /tmp/qemu-conf-24210-24432-30033.o /tmp/qemu-conf-30759-24432-28821.c
-/tmp/qemu-conf-30759-24432-28821.c:2:2: error: #error __i386__ not defined
-cc -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -Wstrict-prototypes -Wredundant-decls -Wall -Wundef -Wwrite-strings -Wmissing-prototypes -fno-strict-aliasing -c -o /tmp/qemu-conf-24210-24432-30033.o /tmp/qemu-conf-30759-24432-28821.c
