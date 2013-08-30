@@ -1,0 +1,1 @@
+/root/qemu/qemu-1.5.50/Makefile.target

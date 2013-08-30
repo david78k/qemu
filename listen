@@ -1,0 +1,5 @@
+#./x86_64-softmmu/qemu-system-x86_64 -incoming x-rdma:0:4444
+./x86_64-softmmu/qemu-system-x86_64 -incoming tcp:0:4444 \
+	-nographic 
+
+#	-enable-kvm \
